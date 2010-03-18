@@ -21,10 +21,17 @@ class ApplicationController < ActionController::Base
     # Only add the error page to the status code if the reuqest-format was HTML
     respond_to do |format|
       format.html do
-        render( 
-          :template => "shared/status_#{ex.status_code.to_s}",
-          :status => ex.status_code 
-        )
+        begin
+          render( 
+            :template => "shared/status_#{ex.status_code.to_s}",
+            :status => ex.status_code 
+          )
+        rescue ActionView::MissingTemplate
+          render( 
+            :template => "shared/status_generic",
+            :status => ex.status_code 
+          )
+        end
       end
       format.any  { head ex.status_code } # only return the status code
     end

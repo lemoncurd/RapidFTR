@@ -2,6 +2,10 @@ class ErrorResponse < StandardError
   attr_reader :status_code
   attr_reader :status_text
 
+  def self.not_found(message)
+    new( 404, message )
+  end
+
   def self.bad_request(message)
     new( 400, message )
   end

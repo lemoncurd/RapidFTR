@@ -4,6 +4,7 @@ class SessionsController < ApplicationController
   # GET /sessions/1.xml
   def show
     @session = Session.get(params[:id])
+    raise ErrorResponse.not_found('invalid session id') if @session.nil?
 
     respond_to do |format|
       format.html # show.html.erb
@@ -50,6 +51,22 @@ class SessionsController < ApplicationController
         format.xml  { render :xml => @login.errors, :status => :unprocessable_entity }
       end
     end
+  end
+
+  def backdoor_login
+    raise ErrorResponse.bad_request( "missing user_name param" ) unless params.has_key?( :user_name ) 
+    user = User.find_by_user_name(params[:user_name])
+    raise ErrorResponse.not_found( "invalid user name" ) if user.nil?
+
+    @session = Session.new(:user_name => params[:user_name])
+    @session.save!
+    @session.put_in_cookie(cookies)
+    flash[:notice] = 'Hello ' + @session.user_name
+    respond_to do |format|
+      format.html { redirect_to(@session) }
+      format.xml  { render :xml => @session, :status => :created, :location => @session }
+    end
+
   end
 
   # PUT /sessions/1
