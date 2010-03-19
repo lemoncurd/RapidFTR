@@ -1,0 +1,48 @@
+<html>
+<head>
+  <script src="http://localhost:3000/APITestRaw/jquery.js"></script>
+</head>
+<body>
+<script>
+
+	//$.ajaxSetup({async:false});
+	
+	// Get authentication
+	
+	$.ajax({
+		url: "http://localhost:3000/sessions/backdoor_login",
+		data: {user_name: "ronze"},
+	  	dataType: 'json',
+	  	success: function(data)
+		{	
+			//$("#textbox").html(data);
+		},
+		complete: function(XMLHttpRequest, textStatus) 
+		{
+			//$("#textbox").html(XMLHttpRequest.getAllResponseHeaders());
+			
+			//$("#textbox").html(XMLHttpRequest); 
+		}
+	});
+	
+	// Get list of all children
+	
+	$.ajax({
+		url: "http://localhost:3000/children",
+	  	dataType: 'json',
+	  	success: function(response)
+		{
+			$("#textbox").html(response.toSource());
+	    }
+	});
+	
+	
+</script>
+
+
+<div id="textbox">
+	
+</div>
+
+</body>
+</html>

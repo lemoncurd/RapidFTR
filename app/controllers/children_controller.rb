@@ -9,6 +9,7 @@ class ChildrenController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @children }
+      format.json  { render :json => @children }
     end
   end
 
@@ -27,6 +28,7 @@ class ChildrenController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @child }
+      format.json  { render :json => @child }
       format.custom("image/jpeg") { send_data(@child.photo, :type => "image/jpeg")}
       format.pdf do
         pdf_data = PdfGenerator.new.child_photo(@child)
@@ -44,6 +46,7 @@ class ChildrenController < ApplicationController
     respond_to do |format|
       format.html
       format.xml  { render :xml => @child }
+      format.json  { render :json => @child }
     end
   end
 
@@ -63,12 +66,14 @@ class ChildrenController < ApplicationController
         flash[:notice] = 'Child record successfully created.'
         format.html { redirect_to(@child) }
         format.xml  { render :xml => @child, :status => :created, :location => @child }
+        format.json  { render :json => @child, :status => :created, :location => @child }
       else
         format.html {
           @form_sections = get_form_sections_for_child @child
           render :action => "new"
         }
         format.xml  { render :xml => @child.errors, :status => :unprocessable_entity }
+        format.json  { render :json => @child.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -89,12 +94,14 @@ class ChildrenController < ApplicationController
         flash[:notice] = 'Child was successfully updated.'
         format.html { redirect_to(@child) }
         format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html {
           @form_sections = get_form_sections_for_child @child
           render :action => "edit"
         }
         format.xml  { render :xml => @child.errors, :status => :unprocessable_entity }
+        format.json  { render :json => @child.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -108,6 +115,7 @@ class ChildrenController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(children_url) }
       format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 
