@@ -4,22 +4,13 @@ describe "histories/show.html.erb" do
 
   describe "child history" do
 
-=begin
     it "should render only the creation record when no histories yet" do
-      assigns[:created] = {:created_at => "Ten O Clock", :created_by => "Barney"}
+      assigns[:child] = Child.create(:last_known_location => "Haiti", :photo => uploadable_photo)
       render
       response.should have_tag("li", :count => 1)
-      response.should have_tag("li", :text => /Record created at Ten O Clock by Barney/)
+      response.should have_tag("li", :text => /Record created by/)
     end
-=end
-   it "should render only the creation record when no histories yet" do
-     assigns[:child] = Child.create(:last_known_location => "Haiti", :photo => uploadable_photo, :created_by => "Barney")
-     render
-     response.should have_tag("li", :count => 1)
-     response.should have_tag("li", :text => /Record created by/)
-    end
-
- 
+    
     it "should render photo change record when updating a photo" do
       child = Child.create(:last_known_location => "Haiti", :photo => uploadable_photo)
 
@@ -34,16 +25,33 @@ describe "histories/show.html.erb" do
       response.should have_tag("li", :text => /Photo changed/)
     end
     
-    it "renders the history partial for the histories" do
-      histories = ['change1', 'change2']
-      assigns[:histories] = histories
-      assigns[:child] = Child.create(:last_known_location => "Haiti", :photo => uploadable_photo)
-      template.should_receive(:render).with(
-              :partial => "history_item",
-              :collection => histories
-      )
+    it "should order history log from most recent change to oldest change" do
+      child = Child.create(:age => "6", :last_known_location => "Haiti", :photo => uploadable_photo)
+
+      child = Child.get(child.id)
+      child['last_updated_at'] = "20/02/2010 12:04"
+      child['age'] = '7'
+      child.save!
       
+      child = Child.get(child.id)
+      child['last_updated_at'] = "20/02/2010 13:04"
+      child['last_known_location'] = 'Santiago'
+      child.save!
+      
+      child = Child.get(child.id)
+      child['last_updated_at'] = "20/02/2011 12:04"
+      child['age'] = '8'
+      child.save!
+      
+      assigns[:child] = Child.get(child.id)
       render
+      
+      response.should have_selector("li") do |elements|
+        elements[0].should contain(/Age changed from 7 to 8/)
+        elements[1].should contain(/Last known location changed from Haiti to Santiago/)
+        elements[2].should contain(/Age changed from 6 to 7/)
+        elements[3].should contain(/Record created by/)
+      end
     end
   end
 end
