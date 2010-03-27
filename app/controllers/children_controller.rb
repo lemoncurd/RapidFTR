@@ -145,11 +145,12 @@ class ChildrenController < ApplicationController
   private
 
   def get_form_sections_for_child child
-  forms = []
+  form_sections = FormSection.all
+  
     Templates.child_form_section_names.each do |section_name|
-      forms << FormSection.create_form_section_from_template(section_name, Templates.get_template(section_name), child)
+      form_sections << FormSection.create_form_section_from_template(section_name, Templates.get_template(section_name), child)
     end
-    return forms
+    return form_sections
   end
 
   def render_results_as_csv
