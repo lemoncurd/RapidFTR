@@ -14,6 +14,7 @@ describe "form section repository" do
     sections = FormSectionRepository.all
 
     sections.length.should == 2
+    
 
   end
 end
