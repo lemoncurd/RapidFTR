@@ -4,7 +4,8 @@ class FieldsController < ApplicationController
   end
 
   def new
-    field = Field.new()
-    render params[:fieldtype]
+    field_type = params[:fieldtype]
+    field = Field.new("", field_type)
+    render field_type
   end
 end
