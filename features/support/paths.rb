@@ -55,6 +55,8 @@ module NavigationHelpers
       when /form section page/
         '/form_sections'
 
+      when /choose field type page/
+        '/fields/new'
 
       when /photo resource for child with name "(.+)"/
         child_name = $1

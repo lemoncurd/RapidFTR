@@ -262,3 +262,14 @@ Then /^show me the page$/ do
   save_and_open_page
 end
 
+Then /^I should find the following links:$/ do |table|
+  table.rows_hash.each do |label, href|
+    assert_have_xpath "//a[@href='#{href}' and text()='#{label}']"
+  end
+end
+
+Then /^I should find the form with following attributes:$/ do |table|
+  table.raw.each do |attribute|
+    assert_contain attribute.first
+  end
+end
