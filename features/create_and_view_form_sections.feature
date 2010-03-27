@@ -1,5 +1,5 @@
 Feature: As an admin I should be able to create and view form sections
-  @wip
+#  @wip
   Scenario:      To view a list of existing forms as an admin
 
     Given "admin" is logged in
