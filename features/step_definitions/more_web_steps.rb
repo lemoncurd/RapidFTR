@@ -34,4 +34,3 @@ end
 Then /^I should have received a "(.+)" status code$/ do |status_code|
   response.status.should == status_code
 end
-
