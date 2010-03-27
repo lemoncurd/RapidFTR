@@ -1,10 +1,19 @@
 require "spec"
 
-describe "repository loads all the form sections" do
+describe "form section repository" do
 
-  it "should " do
+  it "should return a form section for each form definition" do
 
     #To change this template use File | Settings | File Templates.
-    true.should == true
+
+    sectiondef1= FormSectionDefinition.new
+    sectiondef2 = FormSectionDefinition.new
+
+    sectiondefs = FormSectionDefinition.stub!(:all).and_return([sectiondef1,sectiondef2])
+
+    sections = FormSectionRepository.all
+
+    sections.length.should == 2
+
   end
 end

@@ -1,5 +1,5 @@
 class FormSectionRepository
-  def self.get_all_form_sections
+  def self.all
     
   end
 end
