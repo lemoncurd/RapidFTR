@@ -5,7 +5,7 @@ class Field
 
   attr_reader :name, :type, :options, :value
 
-  def initialize field_name, field_type, field_options = [], value = nil
+  def initialize field_name, field_type = '', field_options = [], value = nil
     @name = field_name
     @type = field_type
     @options = FieldOption.create_field_options(field_name, field_options)
