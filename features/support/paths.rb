@@ -52,6 +52,8 @@ module NavigationHelpers
       when /child search results page/
         search_children_path(options)
 
+      when /form section page/
+        '/form_sections'
 
 
       when /photo resource for child with name "(.+)"/
