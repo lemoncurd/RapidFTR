@@ -1,14 +1,16 @@
 require 'spec_helper'
-
+require 'Session'
 describe UsersController do
   include LoggedIn
 
+  before(:each) do
+    fake_session = Session.new()
+    fake_session.stub(:user_type).with(any_args()).and_return("Administator")
+    Session.should_receive(:get).and_return(fake_session)
+  end
+
   def mock_user(stubs={})
-    stubs[:user_type] = "Administrator"
     @mock_user ||= mock_model(User, stubs)
-    fake_session = mock_model(Session, {})
-    fake_session.stub(:user_type).and_return("Administator")
-    Session.stub(:get).and_return(fake_session)
   end
 
   describe "GET index" do
