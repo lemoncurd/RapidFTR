@@ -35,6 +35,7 @@ Given /^the following children exist in the system:$/ do |children_table|
     child.photo = photo
     child['unique_identifier'] = unique_id if unique_id
     child.create!
+  Summary.basic_search("random_string", nil);
   end
 end
 

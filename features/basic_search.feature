@@ -16,6 +16,17 @@ Scenario: Searching for a child given his name
   Then I should be on the child search results page
   And I should see "Willis" in the search results
 
+Scenario: Searching for a chid using the start of their name
+  Given the following children exist in the system:
+    | name     |
+    | Edward   |
+    | Edwin    |
+    | Emmanuel |
+  When I fill in "edw" for "Name"
+  And I press "Search"
+  Then I should be on the child search results page
+  And I should see "Edward" in the search results
+
 Scenario: Searching for a child given his unique identifier
   Given the following children exist in the system:
     | name   	| last_known_location 	| reporter |

@@ -17,38 +17,47 @@ class Summary < CouchRestRails::Document
              }
           }"
 
-
+  self.design_doc['fulltext'] ||= {}
+  self.design_doc['fulltext']['all'] = {
+  "analyzer" => "simple",
+  "index" => "function(doc) {
+    if (doc['couchrest-type'] != 'Child' ) {
+     return null; 
+     }
+     var result = new Document();
+     result.add(doc.name,   {\"field\":\"name\"});
+     result.add(doc.unique_identifier,     {\"field\":\"id\"});
+     result.add(new Date(), {\"field\":\"indexed_at\"});
+     return result;
+   }"}
+  
   def self.basic_search(childs_name, unique_id)
-    x = get_keys_for_search(childs_name, "by_name")
-    y = get_keys_for_search(unique_id, "by_unique_identifier")
-
-    return [] if x == y && x == nil
-    results = and_arrays(x, y)
-    results.sort { |lhs,rhs| lhs["name"] <=> rhs["name"]}
-  end
-
-  def self.and_arrays(*arrays)
-    non_empty_arrays = arrays.reject{ |x| x.nil? || x.empty? }
-    return [] if non_empty_arrays.empty?
-
-    non_empty_arrays.inject do |anded_array,array|
-      anded_array &= array
-    end
+    x = lucene_search_results("all",
+      {"name" => childs_name, "id" => unique_id})
+    return [] if x == nil
+    x.sort { |lhs,rhs| lhs["name"] <=> rhs["name"]}
   end
 
   private
-  def self.get_keys_for_search(search_value, view_to_search)
-    if (search_value && !search_value.empty?)
-      args = create_start_key_end_key(search_value)
-      Summary.view(view_to_search, args)
+  def self.lucene_search_results(index_to_search ,search_values)
+    return nil if !search_values
+    query_string = create_query_string(search_values)
+    results = Summary.search(index_to_search, query_string) if !query_string.empty?
+    results["rows"] if results != nil
+  end
+ 
+  def self.create_query_string(search_values)
+      queries = []
+      search_values.each_pair do
+        |key, value| add_parameter(queries, key, value) 
+      end
+      queries.join(" AND ") 
+  end
+ 
+  def self.add_parameter(parameters, field, value)
+    if (value && !value.empty?)
+      parameters.push("#{field}:#{value}*")
     end
   end
 
-  def self.create_start_key_end_key(from_value)
-    endkey = from_value[0].chr.next
-    args = {:startkey => from_value}
-
-    args.store(:endkey, endkey) unless endkey == "aa"
-    args
-  end
 end

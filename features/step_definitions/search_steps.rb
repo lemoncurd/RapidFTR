@@ -16,7 +16,6 @@ When /^I select search result \#(\d+)$/ do |ordinal|
 end
 
 Then /^I should see "([^\"]*)" in the search results$/ do |value|
-
   rows = Hpricot(response.body).child_name
 
   match = rows.find do |row|
