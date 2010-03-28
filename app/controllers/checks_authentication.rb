@@ -4,9 +4,9 @@ module ChecksAuthentication
 
   def check_authentication
     token = pull_token_from_headers || pull_token_from_cookies
-    raise AuthFailure.no_token('no session token in headers or cookies') if token.blank?
+    raise AuthenticationFailure.no_token('no session token in headers or cookies') if token.blank?
     session = Session.get(token)
-    raise AuthFailure.bad_token('invalid session token') if session.nil?
+    raise AuthenticationFailure.bad_token('invalid session token') if session.nil?
     session
   end
 

@@ -9,10 +9,10 @@ class ApplicationController < ActionController::Base
 
   include ChecksAuthentication
   before_filter :check_authentication
-  rescue_from( AuthFailure ) { |e| handle_authentication_failure(e) }
+  rescue_from( AuthenticationFailure ) { |e| handle_authentication_failure(e) }
 
   # Scrub sensitive parameters from your log
-  filter_parameter_logging :password
+  # filter_parameter_logging :password
 
 
   rescue_from( ErrorResponse ) { |e| render_error_response(e) }

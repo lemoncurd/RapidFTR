@@ -38,7 +38,7 @@ describe ChecksAuthentication, :type => :normal do
   def expect_auth_failure
     lambda{
       yield
-    }.should( raise_error(AuthFailure) )
+    }.should( raise_error(AuthenticationFailure) )
   end
 
   it "should use a token supplied in cookies" do
@@ -76,28 +76,28 @@ describe ChecksAuthentication, :type => :normal do
     exercise_authentication_check.should == :fake_session
   end
 
-  it "should raise the appropriate AuthFailure if no token is supplied" do
+  it "should raise the appropriate AuthenticationFailure if no token is supplied" do
     begin
       exercise_authentication_check
-    rescue AuthFailure => ex
+    rescue AuthenticationFailure => ex
       ex.token_provided?.should == false
       ex.message.should == 'no session token in headers or cookies'
     else
-      fail( 'AuthFailure not raised' )
+      fail( 'AuthenticationFailure not raised' )
     end
   end
 
-  it "should raise the apropriate AuthFailure if no session was found for the specified token" do
+  it "should raise the apropriate AuthenticationFailure if no session was found for the specified token" do
     set_session_token_cookie
     Session.stub!(:get).and_return(nil)
 
     begin
       exercise_authentication_check
-    rescue AuthFailure => ex
+    rescue AuthenticationFailure => ex
       ex.token_provided?.should == true
       ex.message.should == 'invalid session token'
     else
-      fail( 'AuthFailure not raised' )
+      fail( 'AuthenticationFailure not raised' )
     end
   end
 
