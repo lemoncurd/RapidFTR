@@ -134,3 +134,9 @@ Given /^there is a child with the name "([^\"]*)" and a photo from "([^\"]*)"$/ 
 
   child.create!
 end
+
+Given /^the following form sections exist in the system:$/ do |form_sections_table|
+  form_sections_table.hashes.each do |form_section_hash|
+    FormSectionDefinition.create!(form_section_hash)
+  end
+end

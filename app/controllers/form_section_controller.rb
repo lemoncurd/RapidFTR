@@ -3,9 +3,7 @@ class FormSectionController < ApplicationController
 #    @thing = FormSection.new
 #    @thing.add_field(Field.new("sme name", "_text_field"))
 
-    #@form_sections = form_section_repository.get_all_form_sections
-
-    @form_sections = [ FormSection.new("Basic Details"), FormSection.new("Family Details") ]
+    @form_sections = FormSectionRepository.all
 
   end
 end
