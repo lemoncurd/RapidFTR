@@ -96,11 +96,11 @@ Given /there is a User/ do
 end
 
 Given /^I am logged in$/ do
-  Given "there is a User"
-  Given "I am on the login page"
-  Given "I fill in \"#{User.first.user_name}\" for \"user name\""
-  Given "I fill in \"123\" for \"password\""
-  Given "I press \"Log In\""
+  Given "a user \"dave\" with a password \"p4ssword\" logs in"
+end
+
+Given /^I am logged in as "([^\"]*)"$/ do |user_name|
+  Given "a user \"#{user_name}\" with a password \"p4ssword\" logs in"
 end
 
 Given /I am logged out/ do
@@ -108,16 +108,8 @@ Given /I am logged out/ do
   Given "I go to the logout page"
 end
 
-Given /"([^\"]*)" is the user/ do |user_name|
-  Given "a user \"#{user_name}\" with a password \"123\""
-end  
- 
 Given /"([^\"]*)" is logged in/ do |user_name|
-  Given "\"#{user_name}\" is the user"
-  Given "I am on the login page"
-  Given "I fill in \"#{user_name}\" for \"user name\""
-  Given "I fill in \"123\" for \"password\""
-  Given "I press \"Log In\""  
+  Given "a user \"#{user_name}\" with a password \"123\" logs in"
 end
 
 When /^I create a new child$/ do
