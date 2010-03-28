@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'Session'
+
 describe UsersController do
   include LoggedIn
 
