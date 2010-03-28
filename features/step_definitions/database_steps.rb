@@ -26,6 +26,7 @@ Given /^user "(.+)" is disabled$/ do |username|
   user.save!
 end
 
+
 Then /^user "(.+)" should be disabled$/ do |username|
   User.find_by_user_name(username).should be_disabled
 end

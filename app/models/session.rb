@@ -2,6 +2,7 @@ class Session < CouchRestRails::Document
   use_database :sessions
 
   property :user
+  property :user_type
 
   view_by :user_name
 
@@ -41,6 +42,10 @@ class Session < CouchRestRails::Document
   
   def full_name
     user['full_name']
+  end
+
+  def admin?
+    user['user_type'] == "Administrator"
   end
   
 end

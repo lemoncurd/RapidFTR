@@ -34,3 +34,7 @@ end
 Then /^I should have received a "(.+)" status code$/ do |status_code|
   response.status.should == status_code
 end
+
+Then /^I should not be able to see (.+)$/ do |page_name|
+  lambda { visit path_to(page_name) }.should raise_error(AuthorizationFailure)
+end

@@ -9,14 +9,14 @@ class ApplicationController < ActionController::Base
 
   include ChecksAuthentication
   before_filter :check_authentication
-  rescue_from( AuthFailure ) { |e| handle_authentication_failure(e) }
+  rescue_from( AuthenticationFailure ) { |e| handle_authentication_failure(e) }
 
   # Scrub sensitive parameters from your log
-  filter_parameter_logging :password
+  # filter_parameter_logging :password
 
 
   rescue_from( ErrorResponse ) { |e| render_error_response(e) }
- 
+
   def render_error_response(ex)
     @exception = ex
  
@@ -54,6 +54,10 @@ class ApplicationController < ActionController::Base
       return nil
     end
     return session.user_name
+  end
+
+  def admin_required
+    return true
   end
 
   def send_pdf(pdf_data,filename) 
