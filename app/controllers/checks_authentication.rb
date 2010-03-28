@@ -13,7 +13,7 @@ module ChecksAuthentication
   def check_authorization
      token = pull_token_from_headers || pull_token_from_cookies
      session = Session.get(token)
-     raise AuthorizationFailure.new('Not permitted to view page') unless session.user_type == "Administrator"
+     raise AuthorizationFailure.new('Not permitted to view page') unless session.admin?
   end 
 
   def pull_token_from_headers

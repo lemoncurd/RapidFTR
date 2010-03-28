@@ -44,8 +44,8 @@ class Session < CouchRestRails::Document
     user['full_name']
   end
 
-  def user_type
-    user['user_type']
+  def admin?
+    user['user_type'] == "Administrator"
   end
   
 end

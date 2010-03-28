@@ -5,8 +5,8 @@ describe UsersController do
 
   before(:each) do
     fake_session = Session.new()
-    fake_session.stub(:user_type).with(any_args()).and_return("Administator")
-    Session.should_receive(:get).and_return(fake_session)
+    fake_session.stub(:admin?).with(no_args()).and_return(true)
+    Session.stub(:get).and_return(fake_session)
   end
 
   def mock_user(stubs={})

@@ -8,7 +8,7 @@ Feature:
   Scenario: Admin disables a user from the edit page
     Given a user "george"
     And an admin "adam"
-    And I am logged in as "adam"
+    And I have logged in as "adam"
     And I am on edit user page for "george"
     When I check "Disabled?"
     # XXX: re-enter password should go away once user admin is proper
@@ -20,7 +20,7 @@ Feature:
     Given a user "george"
     And an admin "adam"
     And user "george" is disabled
-    And I am logged in as "adam"
+    And I have logged in as "adam"
     And I am on edit user page for "george"
     When I uncheck "Disabled?"
     # XXX: re-enter password should go away once user admin is proper
@@ -30,8 +30,7 @@ Feature:
 
   @allow-rescue
   Scenario: A user who is disabled mid-session can't continue using that session
-    Given a user "george"
-    And I am logged in as "george"
+    Given I am logged in as "george"
     And I am on the children listing page
     When user "george" is disabled
     And I follow "New child"

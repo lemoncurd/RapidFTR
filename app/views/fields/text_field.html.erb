@@ -1,0 +1,22 @@
+
+
+<fieldset>
+  <legend>Add New Field</legend>
+  <div class="subtitle">
+    <h2>2. Field Setup</h2>
+  </div>
+  <div class="content">
+    <% form_for :field, @field, :url => { :action => "create" } do |f| %>
+        <p>
+        <%= label(:name, :name)    %>
+        <%= f.text_field :name %>
+          </p><p>
+        <%= label(:help_text, :helpText)    %>
+        <%= f.text_area :help_text %>
+    </p>
+        <%= submit_tag 'Create' %>
+    <% end %>
+  </div>
+
+
+</fieldset>

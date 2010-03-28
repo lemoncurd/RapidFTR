@@ -109,11 +109,11 @@ end
 
 
 Given /^I am logged in$/ do
-  Given "there is a User"
-  Given "I am on the login page"
-  Given "I fill in \"#{User.first.user_name}\" for \"user name\""
-  Given "I fill in \"#{User.first.password}\" for \"password\""
-  Given "I press \"Log In\""
+  Given "a user \"dave\" with a password \"p4ssword\" logs in"
+end
+
+Given /^I am logged in as "([^\"]*)"$/ do |user_name|
+  Given "a user \"#{user_name}\" with a password \"p4ssword\" logs in"
 end
 
 Given /I am logged out/ do
@@ -121,16 +121,8 @@ Given /I am logged out/ do
   Given "I go to the logout page"
 end
 
-Given /"([^\"]*)" is the user/ do |user_name|
-  Given "a user \"#{user_name}\" with a password \"123\""
-end  
- 
 Given /"([^\"]*)" is logged in/ do |user_name|
-  Given "\"#{user_name}\" is the user"
-  Given "I am on the login page"
-  Given "I fill in \"#{user_name}\" for \"user name\""
-  Given "I fill in \"123\" for \"password\""
-  Given "I press \"Log In\""  
+  Given "a user \"#{user_name}\" with a password \"123\" logs in"
 end
 
 When /^I create a new child$/ do
@@ -154,4 +146,10 @@ Given /^there is a child with the name "([^\"]*)" and a photo from "([^\"]*)"$/ 
   child.photo = uploadable_photo(photo_file_path) 
 
   child.create!
+end
+
+Given /^the following form sections exist in the system:$/ do |form_sections_table|
+  form_sections_table.hashes.each do |form_section_hash|
+    FormSectionDefinition.create!(form_section_hash)
+  end
 end
