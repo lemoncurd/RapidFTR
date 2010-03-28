@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
 
   rescue_from( ErrorResponse ) { |e| render_error_response(e) }
- 
+
   def render_error_response(ex)
     @exception = ex
  
@@ -54,6 +54,10 @@ class ApplicationController < ActionController::Base
       return nil
     end
     return session.user_name
+  end
+
+  def admin_required
+    return true
   end
 
   def send_pdf(pdf_data,filename) 

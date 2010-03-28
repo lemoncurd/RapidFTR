@@ -4,7 +4,11 @@ describe UsersController do
   include LoggedIn
 
   def mock_user(stubs={})
+    stubs[:user_type] = "Administrator"
     @mock_user ||= mock_model(User, stubs)
+    fake_session = mock_model(Session, {})
+    fake_session.stub(:user_type).and_return("Administator")
+    Session.stub(:get).and_return(fake_session)
   end
 
   describe "GET index" do

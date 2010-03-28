@@ -70,6 +70,10 @@ class User < CouchRestRails::Document
     !disabled && password == check
   end
 
+  def make_admin
+    self.user_type = "Administrator"
+  end
+
   private
   def make_user_name_lowercase
      user_name.downcase!

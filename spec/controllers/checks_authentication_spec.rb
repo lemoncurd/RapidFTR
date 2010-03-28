@@ -1,5 +1,11 @@
 require 'spec_helper'
 
+def get_session(user_type)
+  admin_session = Session.new()
+  admin_session.stub!(:user_type).and_return(user_type)
+  return admin_session
+end
+
 describe ChecksAuthentication, :type => :normal do
 
   class FakeController
@@ -21,6 +27,10 @@ describe ChecksAuthentication, :type => :normal do
 
   def exercise_authentication_check
     @controller.send(:check_authentication)
+  end
+
+  def exercise_authorization_check
+    @controller.send(:check_authorization)
   end
 
   def set_header(key,value)
@@ -96,4 +106,22 @@ describe ChecksAuthentication, :type => :normal do
       fail( 'AuthFailure not raised' )
     end
   end
+
+  it "should raise AuthorizationFailure" do
+    Session.stub!(:get).and_return(get_session("User"))
+    
+    begin
+      exercise_authorization_check
+    rescue AuthorizationFailure => ex
+      ex.message.should == 'Not permitted to view page'
+    else
+      fail( 'AuthoratizatonFailure not raised' )
+    end
+  end
+
+  it "should not AuthorizationFailure when user is an administrator" do
+    Session.stub!(:get).and_return(get_session("Administrator"))
+    exercise_authorization_check
+  end
+
 end
