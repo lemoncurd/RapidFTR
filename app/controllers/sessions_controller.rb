@@ -30,42 +30,41 @@ class SessionsController < ApplicationController
   # GET /sessions/new.xml
   def new
     @session = Session.new(params[:login])
+
+    @page_name = "Login"
+
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @session }
     end
   end
 
-
   # POST /sessions
   # POST /sessions.xml
   def create
-
     @login = Login.new(params)
-
     @session = @login.authenticate_user
 
-    if @session
-
+    if not @session
       respond_to do |format|
-        if @session.save
-          @session.put_in_cookie(cookies)
-          flash[:notice] = 'Hello ' + @session.user_name
-          format.html { redirect_to(@session) }
-          format.xml  { render :action => "show", :status => :created, :location => @session }
-        else
-          format.html { render :action => "new" }
-          format.xml  { render :xml => @session.errors, :status => :unprocessable_entity }
-        end
+        handle_create_error("Invalid credentials. Please try again!", format)
       end
-    else
-      respond_to do |format|
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @login.errors, :status => :unprocessable_entity }
+
+      return
+    end
+
+    respond_to do |format|
+      if @session.save
+        @session.put_in_cookie(cookies)
+        flash[:notice] = 'Hello ' + @session.user_name
+        format.html { redirect_to(@session) }
+        format.xml  { render :action => "show", :status => :created, :location => @session }
+      else
+        handle_create_error("There was a problem logging in.  Please try again.", format)
       end
     end
   end
-
+  
   # PUT /sessions/1
   # PUT /sessions/1.xml
 
@@ -82,4 +81,13 @@ class SessionsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  private
+  def handle_create_error(notice, format)
+    format.html {
+      flash[:notice] = notice
+      redirect_to :action => "new" }
+    format.xml  { render :xml => errors, :status => :unprocessable_entity }
+  end
+
 end

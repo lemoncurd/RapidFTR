@@ -1,7 +1,5 @@
-<h1>New session</h1>
-
 <% form_tag sessions_path  do %>
-<%= error_messages_for :login %>
+<%= error_messages_for :session %>
 <p>
   <%= label_tag "user_name", "User name" %>:
   <%= text_field_tag "user_name" %>
