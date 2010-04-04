@@ -42,9 +42,6 @@ else
 
   class CouchRest::ExtendedDocument
     def self.search(index, query, options={})
-      unless design_doc_fresh            
-          refresh_design_doc_on(database)
-      end
       options[:include_docs] = true
       ret = self.database.search(self.to_s, index, query, options)
       ret['rows'].collect!{|r| self.new(r['doc'])}

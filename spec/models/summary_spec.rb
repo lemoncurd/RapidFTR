@@ -12,7 +12,7 @@ describe Summary do
     end
 
     it "should return an empty array if there are no matching results" do
-      #Summary.stub(:search).with(any_args()).any_number_of_times() 
+      Summary.stub(:search).with(any_args()).any_number_of_times() 
       results = Summary.basic_search( 'totally invalid name','absolutely not a valid id' )
       results.should == []
     end

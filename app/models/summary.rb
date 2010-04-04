@@ -16,20 +16,6 @@ class Summary < CouchRestRails::Document
                 emit(doc['unique_identifier'],doc);
              }
           }"
-
-  self.design_doc['fulltext'] ||= {}
-  self.design_doc['fulltext']['all'] = {
-  "analyzer" => "simple",
-  "index" => "function(doc) {
-    if (doc['couchrest-type'] != 'Child' ) {
-     return null; 
-     }
-     var result = new Document();
-     result.add(doc.name,   {\"field\":\"name\"});
-     result.add(doc.unique_identifier,     {\"field\":\"id\"});
-     result.add(new Date(), {\"field\":\"indexed_at\"});
-     return result;
-   }"}
   
   def self.basic_search(childs_name, unique_id)
     x = lucene_search_results("all",
