@@ -34,19 +34,4 @@ else
 
   COUCHDB_SERVER = CouchRest.new COUCHDB_CONFIG[:host_path]
 
-  class CouchRest::Database
-    def search(design, index, query, options={})
-      CouchRest.get CouchRest.paramify_url("#{@root}/_fti/#{design}/#{index}", options.merge(:q => query))
-    end
-  end
-
-  class CouchRest::ExtendedDocument
-    def self.search(index, query, options={})
-      options[:include_docs] = true
-      ret = self.database.search(self.to_s, index, query, options)
-      ret['rows'].collect!{|r| self.new(r['doc'])}
-      ret
-    end
-  end
-
 end

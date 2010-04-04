@@ -18,18 +18,22 @@ class Summary < CouchRestRails::Document
           }"
   
   def self.basic_search(childs_name, unique_id)
-    x = lucene_search_results("all",
-      {"name" => childs_name, "id" => unique_id})
+    x = lucene_search_results("all", {"name" => childs_name, "id" => unique_id})
     return [] if x == nil
     x.sort { |lhs,rhs| lhs["name"] <=> rhs["name"]}
   end
 
   private
   def self.lucene_search_results(index_to_search ,search_values)
-    return nil if !search_values
-    query_string = create_query_string(search_values)
-    results = Summary.search(index_to_search, query_string) if !query_string.empty?
-    results["rows"] if results != nil
+    query = create_query_string(search_values)
+    return nil if query.empty?
+    
+    options = {:include_docs => true, :q => query }
+    ret = @database.search(self.to_s  + "/" + index_to_search, options)
+    return nil if ret.nil? || !ret['rows']
+      
+    ret['rows'].collect!{ |r| self.new(r['doc']) }
+    ret['rows']
   end
  
   def self.create_query_string(search_values)
@@ -45,5 +49,5 @@ class Summary < CouchRestRails::Document
       parameters.push("#{field}:#{value}*")
     end
   end
-
+  
 end
