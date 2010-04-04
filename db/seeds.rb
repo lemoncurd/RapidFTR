@@ -12,3 +12,5 @@ User.create("user_type" => "Administrator",
             "full_name" => "RapidFTR",
             "email" => "rapidftr@rapidftr.com"
 )
+
+CouchRestRails::Lucene.push
